@@ -1,0 +1,32 @@
+global class ChangeAccountOwner implements Database.Batchable<sobject>{
+
+   global final User currentOwner;
+   global final User newOwner;
+   
+
+   global ChangeAccountOwner(String currentOwnerUname, String newOwnerUname){
+
+      currentOwner = [SELECT ID FROM User WHERE Username =:currentOwnerUname LIMIT 1];
+      newOwner = [SELECT ID FROM User WHERE Username =:newOwnerUname LIMIT 1];
+   }
+
+   global Database.QueryLocator start(Database.BatchableContext BC){
+      String currentOwnerId = currentOwner.Id;
+      return Database.getQueryLocator('SELECT Id, OwnerId FROM Account where OwnerId =:'+currentOwnerId);
+   }
+
+   global void execute(Database.BatchableContext BC, List<Account> accts){
+       String X = 'Akshay';
+       Decimal Z = 3.5;
+       string w = 'SELECT Id, OwnerId FROM Account where OwnerId =\'0055i000001mOxpAAE\'';
+       string m ='Select id from account where name =\'Z\'';
+       system.debug('newowner.id');
+     for(Account acct : accts){
+      acct.OwnerId = newOwner.Id; 
+     }
+     update accts;
+    }
+
+   global void finish(Database.BatchableContext BC){
+   }
+}
